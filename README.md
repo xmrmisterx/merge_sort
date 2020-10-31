@@ -1,4 +1,5 @@
 # merge_sort
+[This is essentially a diary of our thoughts as we did this Merge Sort assignment of the Odin Project. At the end of this README is copy of our working code, with full comments.]
 
 Alright, so this is another sorting algorithm, using recursion this time. Apparently one of the benefits of merge sort, vs something like bubble sort, is that bubble sort can take n squared time, whereas merge sort is big O times n log n; basically uses less memory.
 
@@ -80,63 +81,44 @@ Wow, that was actually the secret sauce that finished our code. The "sorted arra
 
 I really like this Pycharm using Python compared to using terminal and Ruby. It seems to compile alot faster and has some extra features that could be useful. We remember having to wait like 1 hr+ to compile our tic tac toe game on terminal lol. We want to comment out this code, and upload it to our other github. How do we do that, since this one is linked to our school github.
 
-This is a copy of our code after finishing, with the prints for debugging purposes.
+This is a copy of our code after finishing, with all the relevant lines commented on.
 
 def merge_sort(list1):
-    if len(list1) < 2:
+    if len(list1) < 2:  #  If the length of the list is less than 2, meaning 1, then...
 
-        return list1
+        return list1  # We return the list. This leaves it in queue to be sorted with its other half.
 
-    else:  # if list has 2 elements or greater...
+    else:  # If the list has 2 elements or greater...
 
-        # print("list is >= 2, len(list1):", len(list1))
-
-        left_list = list1[0:int(len(list1)/2)]
+        left_list = list1[0:int(len(list1)/2)]  # We break the initial list into 2 halves, a left_list and a right_list
         right_list = list1[int(len(list1)/2):len(list1)]
-        # print("left list:", left_list, " right list:", right_list)
 
-        merge_sort(left_list)
+        merge_sort(left_list)  # then we recursively call merge sort on these 2 halves. The function will keep calling until every list is just 1 element in length
         merge_sort(right_list)
 
-        sorted_list_counter = 0
-        left_list_counter = 0
+        sorted_list_counter = 0  # We need 3 counters; sorted list counter is the counter for our main sorted list, which becomes the final list that we return
+        left_list_counter = 0  # Left and right list counters are for the left and right halves of the list. The counters keep track of the index of their respective lists, and so are necessary during the sorting portion of the code.
         right_list_counter = 0
-        while (len(left_list) > left_list_counter) & (len(right_list) > right_list_counter):
-            # print("left list:", left_list, "len(left_list):", len(left_list), " left list counter:", left_list_counter,
-            #     "right list:", right_list, "right list length:", len(right_list), " right list counter:", right_list_counter)
-            if left_list[left_list_counter] < right_list[right_list_counter]:
-                # print("left_list[left_list_counter]:", left_list[left_list_counter], " < right_list[right_list_counter]:",
-                #     right_list[right_list_counter])
-                list1[sorted_list_counter] = left_list[left_list_counter]
-                sorted_list_counter += 1
-                # print("sorted list now:", list1, " with sorted list counter:", sorted_list_counter)
+        while (len(left_list) > left_list_counter) & (len(right_list) > right_list_counter):  # As long as both the left and right list counters are smaller than the length of their respective lists, we run this sorting code. Once the counters are equal to the length of their respective lists, there are no more elements to sort for that list.
+            if left_list[left_list_counter] < right_list[right_list_counter]:  # If the number at the left list counter index is less than the number on the right list counter index...
+                list1[sorted_list_counter] = left_list[left_list_counter]  # Change the list1 number at the sorted list counter index to be equal to that smaller number. We are just sorting the numbers and changing the original list numbers to those numbers here.
+                sorted_list_counter += 1  # We need to tick up the original list counter (sorted list counter) and the left list counter whenever we move onto the next number, since the counters determine what index of the lists to look at.
                 left_list_counter += 1
-                # print("left_list_counter now:", left_list_counter)
-            else:
-                # print("left_list[left_list_counter]:", left_list[left_list_counter], " >= right_list[right_list_counter]:",
-                #     right_list[right_list_counter])
-                list1[sorted_list_counter] = right_list[right_list_counter]
-                sorted_list_counter += 1
-                # print("sorted list now:", list1, " with sorted list counter:", sorted_list_counter)
+            else:  # If the number on the right half is smaller than or equal to the number on the left half...
+                list1[sorted_list_counter] = right_list[right_list_counter]  # Change the number in the original list at the original list counter index to be equal to that.
+                sorted_list_counter += 1  # Again, we tick up the counters to move progressively through the lists.
                 right_list_counter += 1
-                # print("right_list_counter now:", right_list_counter)
 
-        if len(left_list) == left_list_counter:
-            # print("len(left_list) == left_list_counter")
-            for val in range(right_list_counter, len(right_list)):
+        if len(left_list) == left_list_counter:  # At this point, we've broken out of the while loop, so that means we've gone to the end of one of the lists. Here, we want to update the elements from the list that still has elements not inspected into our ever changing original list. So we check if the length of the left list is equal to its counter, meaning we're checking to see if it's the list that we checked all the elements of.
+            for val in range(right_list_counter, len(right_list)):  # Since the right list is the one still with elements sorted and not updated in our original list, we use a for loop to update each element from the right list into our original list. We can also dump the rest of the list's unsorted range in here. However, the elements will be inside a list, and there is no easy way to flatten the resulting list of lists, which is why we're using the for loop here.
                 list1[sorted_list_counter] = right_list[val]
                 sorted_list_counter += 1
-                # print("sorted list now:", list1, " with sorted list counter:", sorted_list_counter)
-        elif len(right_list) == right_list_counter:
-            # print("len(right_list) == right_list_counter")
-            for val in range(left_list_counter, len(left_list)):
+        elif len(right_list) == right_list_counter:  # If we've gone to the end of the right list instead...
+            for val in range(left_list_counter, len(left_list)):  # then use a for loop to update that elements of the left list into our original list.
                 list1[sorted_list_counter] = left_list[val]
                 sorted_list_counter += 1
-                # print("sorted list now:", list1, " with sorted list counter:", sorted_list_counter)
 
-
-    # print(list1)
-    return list1
+    return list1  # We return the list we've been updating so that the next cycle gets a sorted list to work with. This returns the final sorted list when all the merging is complete.
 
 
 # list1 = [6,8,3,2,4,7]
